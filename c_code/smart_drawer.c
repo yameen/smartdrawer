@@ -82,15 +82,32 @@ int main(int argc, const char *argv[]) {
 
 			printf("json response:\n%s", json);
 
-			/*json_error_t error;
+			json_error_t error;
 			json_t *root;
-			root = json_loads(text, &error)
+			root = json_loads(json, 0, &error);
 			//if json does not parse properly loop again!
 			if(!root) {
     				fprintf(stderr, "json error: on line %d: %s\n", error.line, error.text);
     				continue;
-			}*/
-						
+			}
+			json_t *nfcType;
+			nfcType = json_object_get(root, "type");
+			
+			if(!json_is_string(nfcType)) {
+				printf("json is not string\n");
+			} else {
+				printf("nfc is of type %s\n", json_string_value(nfcType));
+			}
+			//pseudo-code
+			/*switch(nfcType)
+				case(person)
+				case(device)
+				case(addperson)
+				case(adddevice)
+				case(unknown)
+			*/
+			//or rather in c we either need to do an if/else/if... etc operation, or translate the string to an integer (e.g. 1-5) and switch on that
+
 			free(nfcID);
 			free(url);
 			free(json);
