@@ -1,16 +1,120 @@
-<html><body><h1>Restful server</h1><h2>API details</h2>
-<h3>(server address)/displayusers</h3>
-<p>Returns JSON of all user in the database</p>
-<h3>(server address)/displaydevices</h3>
-<p>Returns JSON of all devices in the database</p>
-<h3>(server address)/whatis?uid=#######</h3>
-<p>Returns JSON with details of what the uid supplied is. type element in returned JSON can be: 'unknown', 'device', 'user', 'addPersonCard', 'addDeviceCard'</p>
-<h3>(server address)/adduser?uid=#######&firstname=#########&surname=##########</h3>
-<p>Adds a user to the database with those details</p>
-<h3>(server address)/adddevice?uid=########&name=##########&description=###########</h3>
-<p>Adds a device to the database with those details</p>
-<h3>(server address)/assigndevice?userid=#######&deviceid=########</h3>
-<p>Assigns that device to that user in the database, will overwrite any existing assignment</p>
-<h3>(server address)/unassigndevice?deviceid=########</h3>
-<p>Will unassign a device from whatever user it is assigned to</p>
-</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Drawer</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/jquery.dynatable.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.dynatable.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+    <li><a href="#users" data-toggle="tab">Users</a></li>
+    <li><a href="#devices" data-toggle="tab">Devices</a></li>
+    <li><a href="#documentation" data-toggle="tab">RESTful API</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="home">
+        <h1>Smart Drawer <span class="glyphicon glyphicon-download-alt"></span>  <small>Version 0.1</small></h1>
+        <h4>Managing mobile devices for TvMP</h4>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-hand-right"></span> Smart Drawer</h3>
+            </div>
+            <div class="panel-body">
+                Smart Drawer is a physical drawer, with a raspberry pi and NFC scanner attached to it, this keeps a tab on who has which device in their possesion.
+                Each user, taps their id Pass on the scanner, then taps the device they are taking out of the drawer (with and NFC sticker on it).
+                The webserver then assigns the device to that user and records it. You can then view who has what device by using this webpage.
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-hand-right"></span> Using this Webpage</h3>
+            </div>
+            <div class="panel-body">
+                <p>This website allows you to view the devices and users known to Smart Drawer, you can search the information using the features of this website</p>
+                <p> </p>
+                <strong>Navigate using the above tabs</strong>
+                <p> </p>
+                <p>Users - will allow you to list all of the Users that Smart Drawer knows about</p>
+                <p>Devices - will list all of the devices Smart Drawer knows, along with the Users that have them in their possesion</p>
+                <p>RESTful API - will show you the RESTful API commands to operate Smart Drawer</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="documentation">
+        <div class="page-header">
+            <h1>RESTful API Rough Guide <small>A brief guide to the RESTful API used to operate Smart Drawer</small></h1>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/displayusers</h4>
+                <p class="list-group-item-text">Returns JSON of all user in the database</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/displaydevices</h4>
+                <p class="list-group-item-text">Returns JSON of all devices in the database, URL parameter <strong>show</strong> 'raw' - returns JSON representation of database table as is, 'indrawer' - returns all devices that are in the drawer, 'userheld' - returns all devices that are held by users</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/whatis?uid=#######</h4>
+                <p class="list-group-item-text">Returns JSON with details of what the uid supplied is. <strong>type</strong> element in returned JSON can be: 'unknown', 'device', 'user', 'addPersonCard', 'addDeviceCard'</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/adduser?uid=#######&firstname=#########&surname=##########</h4>
+                <p class="list-group-item-text">Adds a user to the database with those details</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/adddevice?uid=########&name=##########&description=###########</h4>
+                <p class="list-group-item-text">Adds a device to the database with those details</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/assigndevice?userid=#######&deviceid=########</h4>
+                <p class="list-group-item-text">Assigns that device to that user in the database, will overwrite any existing assignment</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/unassigndevice?deviceid=########</h4>
+                <p class="list-group-item-text">Will unassign a device from whatever user it is assigned to</p>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-pane" id="users">
+        <h3>Users on Smart Drawer</h3>
+        <p>Click on the <strong>Show All Users</strong> button to list all of the users known to the system in a searchable table</p>
+        <a class="btn btn-info" href="allusers.html" role="button">Show All Users</a>
+    </div>
+    <div class="tab-pane" id="devices">
+        <h3>Devices known to Smart Drawer</h3>
+        <p>Click on the <strong>Show All Devices</strong> button to list all of the devices known to the system in a searchable table</p>
+        <a class="btn btn-info" href="alldevices.html" role="button">Show All Devices</a>
+        <p></p>
+        <p>Click on the <strong>Show All In Drawer</strong> button to list all devices thought to be within the drawer</p>
+        <a class="btn btn-success" href="alldevices.html?show=indrawer" role="button">Show All In Drawer</a>
+        <p></p>
+        <p>Click on the <strong>Show All Held By Users</strong> button to list all devices thought to be in the possession of a User</p>
+        <a class="btn btn-danger" href="alldevices.html?show=userheld" role="button">Show All Held By Users</a>
+    </div>
+</div>
+
+</body>
+</html>

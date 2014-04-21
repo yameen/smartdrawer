@@ -1,0 +1,74 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>All devices in system</title>
+
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smoothness/jquery-ui-1.10.4.custom.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="css/ui.jqgrid.css" />
+
+        <script src="js/jquery-1.7.2.min.js"></script>
+        <script src="js/i18n/grid.locale-en.js" type="text/javascript"></script>
+        <script src="js/jquery.jqGrid.min.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            $(function () {
+                function getURLParameter(sParam){
+                        var sPageURL = window.location.search.substring(1);
+                        var sURLVariables = sPageURL.split('&');
+                        for (var i = 0; i < sURLVariables.length; i++) {
+                            var sParameterName = sURLVariables[i].split('=');
+                            if (sParameterName[0] == sParam) {
+                                return sParameterName[1];
+                            }
+                        }
+		}
+		$("#list").jqGrid({
+                    url: "displaydevices/index.php?show=" + getURLParameter("show"),
+                    datatype: "json",
+                    mtype: "GET",
+                    colNames: ["Device Name", "Description", "Assigned to"],
+                    colModel: [
+                        { name: "devicename", width: 30 },
+                        { name: "description", width: 50 },
+                        { name: "assignedto", width: 40 }
+                    ],
+                    pager: "#pager",
+                    rowNum: 100,
+                    rowList: [10, 50, 100],
+                    sortname: "devicename",
+                    sortorder: "desc",
+                    viewrecords: true,
+                    gridview: true,
+                    autoencode: true,
+    		height: 'auto',
+    		autowidth: true,
+    		loadonce: true,
+    		sortable: true,
+                    caption: "All users",
+    		hidegrid: false,
+    		toppager: true,
+    		ignoreCase: true,
+    		search : {
+         			caption: "Search...",
+         			Find: "Find",
+         			Reset: "Reset",
+         			odata : ['contains', 'equal', 'not equal', 'begins with','does not begin with', 'ends with','does not end with','does not contain'],
+    			groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ],
+         			matchText: " match",
+         			rulesText: " rules"
+    		}
+    		
+                }
+    	).navGrid ('#pager', {cloneToTop:true, add: false, edit: false, del: false, search: true}, {}, {}, {}, {multipleSearch : true}, {closeOnEscape:true} /* allow the view dialog to be closed when user press ESC key*/
+    );
+            });
+        </script>
+
+    </head>
+    <body>
+    <table id="list"><tr><td></td></tr></table>
+    <div id="pager"></div>
+    </body>
+    </html>

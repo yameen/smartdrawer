@@ -2,7 +2,8 @@
 $login = "smartdraweruser";
 $password = "smart";
 $databasename = "smartdrawerdb";
-$tablename = "device";
+$devicetablename = "device";
+$persontablename = "person";
 
 function connectAndSetDatabase() {
 	$mysqli = mysqli_connect("localhost", $GLOBALS['login'], $GLOBALS['password'], $GLOBALS['databasename']);
@@ -23,20 +24,23 @@ function closeDbConnection($dbToClose) {
 function getQueryString() {
 	$parametersSet = $_GET;
 	switch ($parametersSet["show"]) {
-		case 'names':
-		return "SELECT name FROM ". $GLOBALS['tablename'];
-		break;
 
-		case 'ids':
-		return "SELECT passid FROM ". $GLOBALS['tablename'];
+		case 'raw':
+		return "SELECT * FROM ". $GLOBALS['devicetablename'];
+
+		case 'indrawer':
+		return "SELECT device.name AS 'devicename', device.description, 'In Smart Drawer' AS 'assignedto' FROM ". $GLOBALS['devicetablename'] . " WHERE userid IS NULL";
+
+		case 'userheld':
+		return "SELECT device.name AS 'devicename', device.description, CONCAT(person.firstname, ' ', person.surname) AS 'assignedto' FROM ". $GLOBALS['devicetablename'] . " INNER JOIN " . $GLOBALS['persontablename'] . " ON device.userid=person.passid";
 
 		default:
-		return "SELECT * FROM ". $GLOBALS['tablename'];
+		return "SELECT device.name AS 'devicename', device.description, 'In Smart Drawer' AS 'assignedto' FROM ". $GLOBALS['devicetablename'] . " WHERE userid IS NULL UNION SELECT device.name AS 'devicename', device.description, CONCAT(person.firstname, ' ', person.surname) AS 'assignedto' FROM ". $GLOBALS['devicetablename'] . " INNER JOIN " . $GLOBALS['persontablename'] . " ON device.userid=person.passid";
 		break;
 	}
 }
 
-function outputDataFromPersonTable() {
+function outputDataFromDeviceTable() {
 	$dbObject = connectAndSetDatabase();
 	echo getQueryResultsFromDeviceTable($dbObject, getQueryString());
 	closeDbConnection($dbObject);
@@ -64,7 +68,7 @@ function respondWithJsonError($errorCode, $errorMessage) {
 }
 
 function main() {
-	outputDataFromPersonTable();
+	outputDataFromDeviceTable();
 }
 
 //main();
