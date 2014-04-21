@@ -15,6 +15,23 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.dynatable.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#usersDropDown').click(function () {
+            // Only call notifications when opening the dropdown
+            if (!$(this).hasClass('open')) {
+                $.ajax({
+                    type: "GET",
+                    url: "displayusers/getUsersLiHtml.php",
+                    async: false,
+                    success: function (data) {
+                        $('#userDropDownCavity').html(data);
+                    }
+                });
+            }
+        });
+    });
+    </script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,9 +52,9 @@
 <!-- Tab panes -->
 <div class="tab-content">
     <div class="tab-pane active" id="home">
-        <h1>Smart Drawer <span class="glyphicon glyphicon-download-alt"></span>  <small>Version 0.1</small></h1>
+        <h1><span class="glyphicon glyphicon-download-alt"></span> Smart Drawer <small>Version 0.5</small></h1>
         <h4>Managing mobile devices for TvMP</h4>
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><span class="glyphicon glyphicon-hand-right"></span> Smart Drawer</h3>
             </div>
@@ -47,7 +64,7 @@
                 The webserver then assigns the device to that user and records it. You can then view who has what device by using this webpage.
             </div>
         </div>
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title"><span class="glyphicon glyphicon-hand-right"></span> Using this Webpage</h3>
             </div>
@@ -56,18 +73,29 @@
                 <p> </p>
                 <strong>Navigate using the above tabs</strong>
                 <p> </p>
-                <p>Users - will allow you to list all of the Users that Smart Drawer knows about</p>
-                <p>Devices - will list all of the devices Smart Drawer knows, along with the Users that have them in their possesion</p>
-                <p>RESTful API - will show you the RESTful API commands to operate Smart Drawer</p>
+                <p><span class="label label-primary">Users</span> - will allow you to list all of the Users that Smart Drawer knows about and also let you list devices held by a user</p>
+                <p><span class="label label-primary">Devices</span> - will list all of the devices Smart Drawer knows, along with the Users that have them in their possesion</p>
+                <p><span class="label label-primary">RESTful API</span> - will show you the RESTful API commands to operate Smart Drawer</p>
 
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title"> Credits </h3>
+            </div>
+            <div class="panel-body">
+                <p> Developed by:</p>
+                <p><span class="glyphicon glyphicon-user"></span><strong>Yameen Rasul</strong></p>
+                <p><span class="glyphicon glyphicon-user"></span><strong>Duncan Lees</strong></p>
             </div>
         </div>
     </div>
     <div class="tab-pane" id="documentation">
         <div class="page-header">
-            <h1>RESTful API Rough Guide <small>A brief guide to the RESTful API used to operate Smart Drawer</small></h1>
+            <h1><span class="glyphicon glyphicon-cog"></span> RESTful API Rough Guide <small>A brief guide to the RESTful API used to operate Smart Drawer</small></h1>
         </div>
-        <ul class="list-group">
+        <p> This API can be used to develop your own interface to smart drawer and create innovative systems that produce useful reports</p>
+        <ul id="restapibody" class="list-group">
             <li class="list-group-item">
                 <h4 class="list-group-item-heading">(server address)/displayusers</h4>
                 <p class="list-group-item-text">Returns JSON of all user in the database</p>
@@ -79,6 +107,11 @@
             <li class="list-group-item">
                 <h4 class="list-group-item-heading">(server address)/whatis?uid=#######</h4>
                 <p class="list-group-item-text">Returns JSON with details of what the uid supplied is. <strong>type</strong> element in returned JSON can be: 'unknown', 'device', 'user', 'addPersonCard', 'addDeviceCard'</p>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">(server address)/devicesforuser?uid=#######</h4>
+                <h4 class="list-group-item-heading">(server address)/devicesforuser?firstname=#######&surname=#######</h4>
+                <p class="list-group-item-text">Returns JSON with details of devices that the user has in their possesion. NOTE: you must supply <strong>uid</strong> or BOTH <strong>firstname</strong> and <strong>surname</strong></p>
             </li>
             <li class="list-group-item">
                 <h4 class="list-group-item-heading">(server address)/adduser?uid=#######&firstname=#########&surname=##########</h4>
@@ -99,18 +132,31 @@
         </ul>
     </div>
     <div class="tab-pane" id="users">
-        <h3>Users on Smart Drawer</h3>
+        <h2><span class="glyphicon glyphicon-user"></span> Users on Smart Drawer</h2>
         <p>Click on the <strong>Show All Users</strong> button to list all of the users known to the system in a searchable table</p>
         <a class="btn btn-info" href="allusers.html" role="button">Show All Users</a>
+        <h3><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-arrow-left"></span><span class="glyphicon glyphicon-phone"></span> Devices assigned to a specific user</h3>
+        <p>Click on the <strong>Select User</strong> drop down and pick a user to view devices in their possession</p>
+        <div class="btn-group">
+	<a class="btn btn-default dropdown-toggle" id="usersDropDown" data-toggle="dropdown"> Select User
+        <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" id="userDropDownCavity" role="menu" aria-labelledby="dropdownMenu">
+        </ul>
+	</div> 
     </div>
     <div class="tab-pane" id="devices">
-        <h3>Devices known to Smart Drawer</h3>
+        <h2><span class="glyphicon glyphicon-phone"></span> Devices known to Smart Drawer</h2>
         <p>Click on the <strong>Show All Devices</strong> button to list all of the devices known to the system in a searchable table</p>
         <a class="btn btn-info" href="alldevices.html" role="button">Show All Devices</a>
         <p></p>
+        <p></p>
+        <h3><span class="glyphicon glyphicon-phone"></span><span class="glyphicon glyphicon-arrow-right"></span><span class="glyphicon glyphicon-download-alt"></span> Show devices that are in Smart Drawer</h3>
         <p>Click on the <strong>Show All In Drawer</strong> button to list all devices thought to be within the drawer</p>
         <a class="btn btn-success" href="alldevices.html?show=indrawer" role="button">Show All In Drawer</a>
         <p></p>
+        <p></p>
+        <h3><span class="glyphicon glyphicon-phone"></span><span class="glyphicon glyphicon-arrow-right"></span><span class="glyphicon glyphicon-user"></span> Show all devices that are held by users</h3>
         <p>Click on the <strong>Show All Held By Users</strong> button to list all devices thought to be in the possession of a User</p>
         <a class="btn btn-danger" href="alldevices.html?show=userheld" role="button">Show All Held By Users</a>
     </div>

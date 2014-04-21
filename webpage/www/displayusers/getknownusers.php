@@ -20,8 +20,14 @@ function closeDbConnection($dbToClose) {
 	}
 }
 
-function getQueryString() {
-	$parametersSet = $_GET;
+function getQueryString($show) {
+	if(!$show) {
+		$parametersSet = $_GET;
+	}
+	else {
+		$parametersSet = array("show"=>$show);
+	}
+
 	switch ($parametersSet["show"]) {
 		case 'names':
 		return "SELECT firstname, surname FROM ". $GLOBALS['tablename'];
@@ -36,9 +42,9 @@ function getQueryString() {
 	}
 }
 
-function outputDataFromPersonTable() {
+function outputDataFromPersonTable($show) {
 	$dbObject = connectAndSetDatabase();
-	echo getQueryResultsFromPersonTable($dbObject, getQueryString());
+	echo getQueryResultsFromPersonTable($dbObject, getQueryString($show));
 	closeDbConnection($dbObject);
 }
 
