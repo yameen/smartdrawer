@@ -4,7 +4,7 @@
 #include <curl/curl.h>
 #include <jansson.h>
 
-#define BASE_URL_FORMAT "http://10.10.4.129/%s"
+#define BASE_URL_FORMAT "http://localhost/%s"
 #define WHAT_IS_URL_EXT_FORMAT "whatis?uid=%s"
 #define ADD_USER_URL_EXT_FORMAT "adduser?uid=%s&firstname=%s&surname=%s"
 #define ADD_DEVICE_URL_EXT_FORMAT "adddevice?uid=%s&name=%s&description=%s"
